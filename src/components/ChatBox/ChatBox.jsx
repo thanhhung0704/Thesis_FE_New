@@ -255,9 +255,8 @@ function ChatBox() {
                     onClick={handleClick}>
                     <FaMicrophone className='send-btn-icon' />
                 </button>
-                
-
             </div>
+            <button className="new-chat-btn">New</button>
         </div>
     </div>
     

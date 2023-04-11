@@ -102,7 +102,7 @@ function ChatBox() {
     }
 
     const sendMessage = (message) => {
-        const url = 'http://0.0.0.0:8002/api/v1/qa';
+        const url = 'http://localhost:8002/api/v1/qa';
     
         const data = {
             "context": '',
@@ -112,11 +112,11 @@ function ChatBox() {
         setIsLoading(true);
     
         axios.post(url, data).then((response) => {
-          console.log(response);
-          if(response.text !== '') {
-            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.text }])
+          console.log(response.data);
+          if(response.data.text !== '') {
+            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.text }])
           }
-          else if(response.text === ''){
+          else if(response.data.text === ''){
             setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: 'Không tìm thấy câu trả lời!' }])
           }
           

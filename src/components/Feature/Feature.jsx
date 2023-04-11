@@ -1,6 +1,8 @@
 import React from 'react'
 import './feature.css'
 import {HiOutlineDesktopComputer, HiOutlineMicrophone, HiOutlineChat} from 'react-icons/hi'
+import {SiRobotframework} from 'react-icons/si'
+import {BiBot} from 'react-icons/bi'
 // import {BsChatText} from 'react-icons/bs'
 // import {CiMicrophoneOn} from 'react-icons/ci'
 
@@ -14,21 +16,21 @@ function Feature() {
         </linearGradient>
       </svg>
       <div className="text-wrapper">
-        <h1 className='gradient-text'>Features</h1>
-        <h2>The new Bing offers you reliable, up-to-date results and complete answers to your questions. Of course, it also cites the sources.</h2>
+        <h1 className='gradient-text'>Tính năng</h1>
+        <h2>Hệ thống sẽ giúp bạn tự động giải đáp các thắc mắc mà không cần phải tốn công sức tìm và đọc các đoạn quy định dài dòng.</h2>
       </div>
       <div className="feature-wrapper">
         <div className="feature-item">
-          <h3 className='feature-icon'><HiOutlineDesktopComputer style={{ stroke: "url(#blue-gradient)" }} /></h3>
-          <div className="feature-item-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Aut, veniam earum itaque iusto, natus, aliquid illo quas repellendus?</div>
+          <h3 className='feature-icon'><HiOutlineChat  /></h3>
+          <div className="feature-item-text">Hỏi về các vấn đề liên quan đến quy định, tìm kiếm chương trình đào tạo hoặc thông tin giảng viên mà bạn cần.</div>
         </div>
         <div className="feature-item">
-          <h3 className='feature-icon'><HiOutlineChat style={{ stroke: "url(#blue-gradient)" }}/></h3>
-          <div className="feature-item-text">Lorem ipsum, dolor sit amet consectetur adipisicing elit. Fuga ipsam officia molestiae. Reprehenderit amet sed saepe esse recusandae?</div>
+          <h3 className='feature-icon'><BiBot style={{ stroke: "url(#blue-gradient)" }}/></h3>
+          <div className="feature-item-text">Trò chuyện với hệ thống, xây dựng thành một cuộc hội thoại hoàn chỉnh.</div>
         </div>
         <div className="feature-item">
-          <h3 className='feature-icon'><HiOutlineMicrophone style={{ stroke: "url(#blue-gradient)" }}/></h3>
-          <div className="feature-item-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum nostrum fugiat tempore a, dolor architecto recusandae iste excepturi autem, laboriosam labore?</div>
+          <h3 className='feature-icon'><HiOutlineMicrophone /></h3>
+          <div className="feature-item-text">Sử dụng giọng nói hoặc đánh máy một cách linh hoạt.</div>
         </div>
       </div>
     </div>

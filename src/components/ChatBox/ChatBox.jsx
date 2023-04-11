@@ -4,6 +4,7 @@ import './chatbox.css'
 import {TbSend} from 'react-icons/tb'
 import {FaMicrophone, FaRegKeyboard} from 'react-icons/fa'
 import {BsChatLeftTextFill, BsPlusLg} from 'react-icons/bs'
+import {GiMagicBroom} from 'react-icons/gi'
 import fixWebmDuration from "fix-webm-duration";
 import { useState, useRef, useEffect } from 'react'
 import axios from 'axios';
@@ -160,8 +161,8 @@ function ChatBox() {
                 <div className="chatbox-area">
                     <div className="welcome-container">
                         <div className="icon"></div>
-                        <h1 className='gradient-text'>Welcome to the BK ChatBot</h1>
-                        <h2>Your AI-powered for University Policy</h2>
+                        <h1 className='gradient-text'>Xin chào, tôi là BK Heart</h1>
+                        <h2>Hệ thống hỏi và trò chuyện đáng tin cậy của bạn</h2>
                     </div>
                     <div className="chat-content">
                         {
@@ -177,7 +178,7 @@ function ChatBox() {
                     </div>
                 </div>
                 <div className="chatbox-sample">
-                    <h5>Chat history</h5>
+                    <h5>Lịch sử chat</h5>
                     {/* <div className="sample-card">
                         <div>
                             <div className="sample-item">
@@ -256,7 +257,9 @@ function ChatBox() {
                     <FaMicrophone className='send-btn-icon' />
                 </button>
             </div>
-            <button className="new-chat-btn">New</button>
+            <button className="new-chat-btn">
+                <GiMagicBroom />
+            </button>
         </div>
     </div>
     

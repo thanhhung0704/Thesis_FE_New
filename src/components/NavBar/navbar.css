@@ -7,7 +7,9 @@
     border-bottom: 1px solid #979797;
     position: fixed;
     transition: 0.3 ease-in-out;
+    box-shadow: 0px 1px 5px rgba(0, 0, 0, 0.3);
     z-index: 999;
+    
 }
 
 .navbar .container {

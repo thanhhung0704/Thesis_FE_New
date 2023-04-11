@@ -13,25 +13,25 @@ function Example() {
         </linearGradient>
       </svg>
       <div className="text-wrapper">
-        <h1 className='gradient-text'>Example Question</h1>
-        <h2>Ask your questions short, long or anything in between. The more precise you ask, the better the answer.</h2>
+        <h1 className='gradient-text'>Câu hỏi mẫu</h1>
+        {/* <h2>Ask your questions short, long or anything in between. The more precise you ask, the better the answer.</h2> */}
       </div>
       <div className="example-wrapper">
         <div className="example-item">
-          <p className="example-question">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro sint magnam iusto quisquam, eligendi aspernatur.</p>
-          <p className="example-answer"><span><strong>Answer:</strong> This is the answer</span></p>
+          <p className="example-question">Tôi muốn tìm thông tin liên lạc của thầy Nguyễn Minh H ?</p>
+          {/* <p className="example-answer"><span><strong>Answer:</strong> This is the answer</span></p> */}
         </div>
         <div className="example-item">
-          <p className="example-question">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro sint magnam iusto quisquam, eligendi aspernatur.</p>
-          <p className="example-answer"><span><strong>Answer:</strong> This is the answer 2</span></p>
+          <p className="example-question">Số tín chỉ tối thiểu phải đăng kí trong một học kì là bao nhiêu vậy ?</p>
+          {/* <p className="example-answer"><span><strong>Answer:</strong> This is the answer 2</span></p> */}
         </div>
         <div className="example-item">
-          <p className="example-question">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Porro sint magnam iusto quisquam, eligendi aspernatur.</p>
-          <p className="example-answer"><span><strong>Answer:</strong> This is the answer 3</span></p>
+          <p className="example-question">Mình muốn viết đơn xin rút môn học thì phải làm thế nào ?</p>
+          {/* <p className="example-answer"><span><strong>Answer:</strong> This is the answer 3</span></p> */}
         </div>
       </div>
       <div>
-        <Link to="/chat"><button className='btn'>Try now</button></Link>
+        <Link to="/chat"><button className='btn'>Bắt đầu ngay</button></Link>
       </div>
     </div>
   )

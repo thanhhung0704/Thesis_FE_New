@@ -43,8 +43,6 @@
 }
 
 
-
-
 .navbar li a:not(.active)::before {
     content: "";
     width: 30%;

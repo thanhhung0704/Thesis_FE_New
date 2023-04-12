@@ -87,7 +87,9 @@ function ChatBox() {
     const handleStopRecording = () => {
         setIsPress(false);
         setIsRecording(false);
-        mediaRecorder.stop();
+        if(mediaRecorder){
+            mediaRecorder.stop();
+        }
     }
 
     const handleSubmit = (event) => {
@@ -155,7 +157,7 @@ function ChatBox() {
 
   return (
     <div className='chatbox-wrapper'>
-        {audioURL && <audio src={audioURL} controls />}
+        {/* {audioURL && <audio src={audioURL} controls />} */}
         <div className="display-area">
             <div className="chatbox-container">
                 <div className="chatbox-area">
@@ -246,6 +248,7 @@ function ChatBox() {
                     </button>
                 ) : (<button
                     className={`voice-btn-record ${isPress ? 'pulse' : ''} ${isInput ? 'btn-hide' : ''} ${isClick ? 'voice-btn-record-big' : ''}   `}
+                    onTouchStart={handleStartRecording}
                     onMouseDown={handleStartRecording}
                     >
                     <FaMicrophone className='send-btn-icon' />

@@ -215,7 +215,7 @@ function ChatBox() {
             </div>
         </div>
         <div className="typing-area">
-            <div className="input-area">
+            <div className={`input-area ${isClick ? 'input-area-small' : ''}  `}>
                 <input
                     disabled = {isDisabled}
                     type="text"

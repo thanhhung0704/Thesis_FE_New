@@ -3,7 +3,7 @@ import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
 import HomePage from './pages/HomePage/HomePage';
 import ChatPage from './pages/ChatPage/ChatPage';
 // import { Header, Feature, Example } from './components';
-import './app.css'
+import './App.css'
 
 function App() {
   return (

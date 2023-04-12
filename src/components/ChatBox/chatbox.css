@@ -131,7 +131,8 @@
     height: 78px;
     display: flex;
     width: 100%;
-    padding-bottom: 18px;
+    padding-bottom: 42px;
+    /* padding-left: 64px; */
     z-index: 1;
     background-color: #f6f7ff;
     align-items: center;
@@ -141,12 +142,17 @@
 .typing-area .input-area {
     /* margin-left: 10rem;
     margin-right: 10rem; */
-    width: 60%;
+    width: 70%;
     position: relative;
     display: flex;
     padding: 14px 0rem 14px 16px;
     margin-right: 10px;
+    transition: all 0.3s;
     align-items: center;
+}
+
+.typing-area .input-area-small {
+    width: 30%;
 }
 
 
@@ -158,7 +164,6 @@
     outline: none;
     opacity: 1;
     background: #fff;
-    overflow-y: hidden;
     font-size: 18px;
     border-radius: 50px;
     padding: 0 3rem 0 2rem;
@@ -180,7 +185,7 @@
   color: #1488d8;
   margin: 0;
   padding: 0;
-  right: 1rem;
+  right: 2rem;
   font-size: 1.5rem;
   transition: all 0.3s ease;
   cursor: pointer;
@@ -266,10 +271,10 @@
 
 .typing-area .input-area .voice-btn-big {
     color: #fff;
-    right: 35%;
+    right: 25%;
     /* transform: translateX(50%); */
-    height: 5rem;
-    width: 5rem;
+    height: 6rem;
+    width: 6rem;
     font-size: 2.5rem;
     border-radius: 50%;
     border: none;
@@ -281,10 +286,10 @@
 
 .typing-area .input-area .voice-btn-record-big {
     color: #fff;
-    right: 35%;
+    right: 25%;
     /* transform: translateX(50%); */
-    height: 5rem;
-    width: 5rem;
+    height: 6rem;
+    width: 6rem;
     font-size: 2.5rem;
     border-radius: 50%;
     border: none;

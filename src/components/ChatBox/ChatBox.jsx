@@ -7,6 +7,7 @@ import {BsChatLeftTextFill, BsPlusLg} from 'react-icons/bs'
 import {GiMagicBroom} from 'react-icons/gi'
 import fixWebmDuration from "fix-webm-duration";
 import { useState, useRef, useEffect } from 'react'
+import Modal from '../Modal/Modal'
 import axios from 'axios';
 
 
@@ -21,12 +22,31 @@ function ChatBox() {
     const [inputValue, setInputValue] = useState('');
     const [chatLog, setChatLog] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
+    const [isLoadingVoice, setIsLoadingVoice] = useState(false);
     const lastMessageRef = useRef(null);
 
     const [audioURL, setAudioURL] = useState('');
     const [mediaRecorder, setMediaRecorder] = useState(null);
     let chunks = [];
 
+    function boldString(str, substr) {
+        var strRegExp = new RegExp(substr, 'g');
+        str = str.replace(strRegExp, '<b>'+substr+'</b>');
+        return str.replace(/\n/g, "<br />");
+    }
+
+    const handleClear = () => {
+        setIsRecording(false);
+        setIsPress(false);
+        setIsInput(false);
+        setIsClick(false);
+        setIsDisabled(false);
+        setInputValue('');
+        // setChatLog([]);
+        setIsLoading(false);
+        setIsLoadingVoice(false);
+        setChatLog(([{ type: 'bot', message: 'Bạn muốn hỏi câu gì tiếp theo?', context: '' }]));
+    }
 
     const handleStartRecording = () => {
         setIsPress(true);
@@ -58,31 +78,34 @@ function ChatBox() {
     }
 
     const uploadAudio = async (audio) => {
+        setIsLoadingVoice(true);
         const fileName = `recording-${Date.now()}.webm`;
         const formData = new FormData();
         formData.append('file', audio, fileName);
         
-        try {
-          axios.post('http://localhost:8001/api/v1/stt', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data'
-            }
-          }).then(response => {
+    
+        axios.post('http://localhost:8001/api/v1/stt', formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data'
+        }
+        }).then(response => {
             console.log(response.data);
             const parseData = response.data;
+            console.log(parseData.context);
             setChatLog((prevChatLog) => [...prevChatLog, { type: 'user', message: parseData.question }])
             if(parseData.text !== '') {
-                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.text }])
-              }
-              else if(parseData.text === ''){
-                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: 'Không tìm thấy câu trả lời!' }])
-              }
+                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.text, context: boldString(parseData.context, parseData.text)  }])
+                }
+                else if(parseData.text === ''){
+                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: 'Không tìm thấy câu trả lời!', context: '' }])
+                }
             // navigate('/chat', { state:  parseData  });
+            setIsLoadingVoice(false);
+        }).catch((error) => {
+            setIsLoadingVoice(false);
+            console.log(error);
           })
-        } catch (error) {
-          console.log(error);
-        }
-      };
+    };
 
     const handleStopRecording = () => {
         setIsPress(false);
@@ -116,11 +139,12 @@ function ChatBox() {
     
         axios.post(url, data).then((response) => {
           console.log(response.data);
+          console.log(response.data.context);
           if(response.data.text !== '') {
-            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.text }])
+            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.text, context: boldString(response.data.context, response.data.text) }])
           }
           else if(response.data.text === ''){
-            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: 'Không tìm thấy câu trả lời!' }])
+            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: 'Không tìm thấy câu trả lời!', context: '' }])
           }
           
           setIsLoading(false);
@@ -169,13 +193,45 @@ function ChatBox() {
                     <div className="chat-content">
                         {
                             chatLog.map((message, index) => (
-                                <div key={index} className={`chat ${
-                                    message.type === 'user' ? 'user-message' : 'bot-message'} `}>
+                                message.type === 'user' ? 
+                                (<div key={index} className={`chat user-message `}>
                                     <div ref={lastMessageRef} className="details">
                                         <p>{message.message}</p>
-                            </div>
-                        </div>
+                                    </div>
+                                </div>):
+                                (message.context === '' ? (
+                                    <div key={index} className={`chat bot-message `}>
+                                    <div ref={lastMessageRef} className="details">
+                                        <div className='content'>{message.message}</div>
+                                        {/* <div className='footer'>
+                                            <Modal content={message.context}/>
+                                        </div> */}
+                                    </div>
+                                </div>    
+                                ):
+                                <div key={index} className={`chat bot-message `}>
+                                    <div ref={lastMessageRef} className="details">
+                                        <div className='content'>{message.message}</div>
+                                        <div className='footer'>
+                                            <Modal content={message.context}/>
+                                        </div>
+                                        
+                                    </div>
+                                </div>)
                             ))
+                        }
+                        {
+                            isLoading &&
+                            <div key={chatLog.length} className={`chat bot-message `}>
+                                    <div ref={lastMessageRef} className="details">
+                                        <div className="loading-animation">
+                                            <div className="loading-dot"></div>
+                                            <div className="loading-dot"></div>
+                                            <div className="loading-dot"></div>
+                                        </div>
+
+                                    </div>
+                                </div>
                         }
                     </div>
                 </div>
@@ -189,30 +245,20 @@ function ChatBox() {
                             </div>
                         </div>
                     </div> */}
-                    <div className="sample-card">
-                        <div>
-                            <div className="sample-item">
-                                <BsChatLeftTextFill className='history-icon'/>
-                                <p className="sample-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="sample-card">
-                        <div>
-                            <div className="sample-item">
-                                <BsChatLeftTextFill className='history-icon'/>
-                                <p className="sample-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="sample-card">
-                        <div>
-                            <div className="sample-item">
-                                <BsChatLeftTextFill className='history-icon'/>
-                                <p className="sample-description">Lorem ipsum dolor sit amet consectetur adipisicing elit.</p>
-                            </div>
-                        </div>
-                    </div>
+                    {
+                            chatLog.map((message, index) => (
+                                message.type === 'user' ?
+                                (<div className="sample-card">
+                                <div>
+                                    <div className="sample-item">
+                                        <BsChatLeftTextFill className='history-icon'/>
+                                        <p className="sample-description">{message.message}</p>
+                                    </div>
+                                </div>
+                            </div>):
+                                null
+                            ))
+                        }
                 </div>
             </div>
         </div>
@@ -251,7 +297,16 @@ function ChatBox() {
                     onTouchStart={handleStartRecording}
                     onMouseDown={handleStartRecording}
                     >
-                    <FaMicrophone className='send-btn-icon' />
+                        {
+                            isLoadingVoice && isClick  ?
+                            (<div className='spinner'>
+                                <div className="bubble-1"></div>
+                                <div className="bubble-2"></div>
+                            </div>) :
+                            (<FaMicrophone className='send-btn-icon' />)
+                            
+                        }
+                        
                     </button>)}
                 
                 <button
@@ -260,7 +315,7 @@ function ChatBox() {
                     <FaMicrophone className='send-btn-icon' />
                 </button>
             </div>
-            <button className="new-chat-btn">
+            <button className="new-chat-btn" onClick={handleClear}>
                 <GiMagicBroom />
             </button>
         </div>

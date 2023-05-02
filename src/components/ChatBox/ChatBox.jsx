@@ -23,12 +23,24 @@ function ChatBox() {
     const [chatLog, setChatLog] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingVoice, setIsLoadingVoice] = useState(false);
+    const [sessionId, setSessionId] = useState(null);
     const lastMessageRef = useRef(null);
 
     const [audioURL, setAudioURL] = useState('');
     const [mediaRecorder, setMediaRecorder] = useState(null);
     let chunks = [];
 
+    useEffect(() => {
+        lastMessageRef.current?.scrollIntoView();
+
+    }, [chatLog])
+
+    useEffect(() => {
+        // const uuid = crypto.randomUUID();
+        setSessionId(crypto.randomUUID());
+    }, []);
+
+    
     function boldString(str, substr) {
         var strRegExp = new RegExp(substr, 'g');
         str = str.replace(strRegExp, '<b>'+substr+'</b>');
@@ -46,6 +58,8 @@ function ChatBox() {
         setIsLoading(false);
         setIsLoadingVoice(false);
         setChatLog(([{ type: 'bot', message: 'Bạn muốn hỏi câu gì tiếp theo?', context: '' }]));
+        setSessionId(crypto.randomUUID());
+
     }
 
     const handleStartRecording = () => {
@@ -174,13 +188,11 @@ function ChatBox() {
         }
     }
 
-    useEffect(() => {
-        lastMessageRef.current?.scrollIntoView();
-
-    }, [chatLog])
-
   return (
     <div className='chatbox-wrapper'>
+        {/* {sessionId && (
+        <p>Session ID: {sessionId}</p>
+      )} */}
         {/* {audioURL && <audio src={audioURL} controls />} */}
         <div className="display-area">
             <div className="chatbox-container">
@@ -248,7 +260,7 @@ function ChatBox() {
                     {
                             chatLog.map((message, index) => (
                                 message.type === 'user' ?
-                                (<div className="sample-card">
+                                (<div key={index} className="sample-card">
                                 <div>
                                     <div className="sample-item">
                                         <BsChatLeftTextFill className='history-icon'/>

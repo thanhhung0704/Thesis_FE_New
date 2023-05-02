@@ -3,7 +3,7 @@ import './chatbox.css'
 // import { BiSearchAlt} from 'react-icons/bi'
 import {TbSend} from 'react-icons/tb'
 import {FaMicrophone, FaRegKeyboard} from 'react-icons/fa'
-import {BsChatLeftTextFill, BsPlusLg} from 'react-icons/bs'
+import {BsChatLeftTextFill} from 'react-icons/bs'
 import {GiMagicBroom} from 'react-icons/gi'
 import fixWebmDuration from "fix-webm-duration";
 import { useState, useRef, useEffect } from 'react'
@@ -23,10 +23,10 @@ function ChatBox() {
     const [chatLog, setChatLog] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
     const [isLoadingVoice, setIsLoadingVoice] = useState(false);
-    const [sessionId, setSessionId] = useState(null);
+    const [conversation_id, setConversation_id] = useState(null);
     const lastMessageRef = useRef(null);
 
-    const [audioURL, setAudioURL] = useState('');
+    // const [audioURL, setAudioURL] = useState('');
     const [mediaRecorder, setMediaRecorder] = useState(null);
     let chunks = [];
 
@@ -37,7 +37,7 @@ function ChatBox() {
 
     useEffect(() => {
         // const uuid = crypto.randomUUID();
-        setSessionId(crypto.randomUUID());
+        setConversation_id(crypto.randomUUID());
     }, []);
 
     
@@ -58,7 +58,7 @@ function ChatBox() {
         setIsLoading(false);
         setIsLoadingVoice(false);
         setChatLog(([{ type: 'bot', message: 'Bạn muốn hỏi câu gì tiếp theo?', context: '' }]));
-        setSessionId(crypto.randomUUID());
+        setConversation_id(crypto.randomUUID());
 
     }
 
@@ -80,11 +80,11 @@ function ChatBox() {
             recorder.addEventListener('stop', () => {
               const duration = Date.now() - startTime;
               const audioBlob = new Blob(chunks, { type: 'audio/webm' });
-              const audioUrl = URL.createObjectURL(audioBlob);
+            //   const audioUrl = URL.createObjectURL(audioBlob);
     
               fixWebmDuration(audioBlob, duration, (fixedBlob) => {
-                const audioUrl = URL.createObjectURL(fixedBlob);
-                setAudioURL(audioUrl);
+                // const audioUrl = URL.createObjectURL(fixedBlob);
+                // setAudioURL(audioUrl);
                 uploadAudio(fixedBlob);
               });
             });
@@ -95,6 +95,7 @@ function ChatBox() {
         setIsLoadingVoice(true);
         const fileName = `recording-${Date.now()}.webm`;
         const formData = new FormData();
+        formData.append('conversation_id', conversation_id);
         formData.append('file', audio, fileName);
         
     
@@ -107,12 +108,18 @@ function ChatBox() {
             const parseData = response.data;
             console.log(parseData.context);
             setChatLog((prevChatLog) => [...prevChatLog, { type: 'user', message: parseData.question }])
-            if(parseData.text !== '') {
-                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.text, context: boldString(parseData.context, parseData.text)  }])
-                }
-                else if(parseData.text === ''){
-                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: 'Không tìm thấy câu trả lời!', context: '' }])
-                }
+            if(response.data.end_position === 1 || response.data.end_position === -1 ) {
+                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.response), isContext:false  }])
+            }
+            else {
+                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.response), isContext:true  }])
+            }
+            // if(parseData.response !== '') {
+            //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.response)  }])
+            // }
+            // else if(parseData.response === ''){
+            //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: 'Không tìm thấy câu trả lời!', context: '' }])
+            // }
             // navigate('/chat', { state:  parseData  });
             setIsLoadingVoice(false);
         }).catch((error) => {
@@ -146,7 +153,8 @@ function ChatBox() {
     
         const data = {
             "context": '',
-            "question": message
+            "utterance": message,
+            "conversation_id": conversation_id
         };
     
         setIsLoading(true);
@@ -154,12 +162,18 @@ function ChatBox() {
         axios.post(url, data).then((response) => {
           console.log(response.data);
           console.log(response.data.context);
-          if(response.data.text !== '') {
-            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.text, context: boldString(response.data.context, response.data.text) }])
+          if(response.data.end_position === 1 || response.data.end_position === -1 ) {
+            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.response), isContext: false }])
           }
-          else if(response.data.text === ''){
-            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: 'Không tìm thấy câu trả lời!', context: '' }])
+          else {
+            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.response), isContext: true }])
           }
+        //   if(response.data.response !== '') {
+        //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.response) }])
+        //   }
+        //   else if(response.data.response === ''){
+        //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: 'Không tìm thấy câu trả lời!', context: '' }])
+        //   }
           
           setIsLoading(false);
         }).catch((error) => {
@@ -190,8 +204,8 @@ function ChatBox() {
 
   return (
     <div className='chatbox-wrapper'>
-        {/* {sessionId && (
-        <p>Session ID: {sessionId}</p>
+        {/* {conversation_id && (
+        <p>Session ID: {conversation_id}</p>
       )} */}
         {/* {audioURL && <audio src={audioURL} controls />} */}
         <div className="display-area">
@@ -211,7 +225,7 @@ function ChatBox() {
                                         <p>{message.message}</p>
                                     </div>
                                 </div>):
-                                (message.context === '' ? (
+                                (!message.isContext  ? (
                                     <div key={index} className={`chat bot-message `}>
                                     <div ref={lastMessageRef} className="details">
                                         <div className='content'>{message.message}</div>
@@ -220,7 +234,7 @@ function ChatBox() {
                                         </div> */}
                                     </div>
                                 </div>    
-                                ):
+                                ):(
                                 <div key={index} className={`chat bot-message `}>
                                     <div ref={lastMessageRef} className="details">
                                         <div className='content'>{message.message}</div>
@@ -230,6 +244,7 @@ function ChatBox() {
                                         
                                     </div>
                                 </div>)
+                                )
                             ))
                         }
                         {

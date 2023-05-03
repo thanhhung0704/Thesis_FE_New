@@ -382,20 +382,27 @@
 
 .typing-area .input-area .voice-btn-record-big::before{
     pointer-events: none;
-    content: "Giữ để Nói";
+    content: "Giữ để nói";
     font-size: 1.5rem;
     visibility: visible;
     opacity: 1;
     transition: all 0.3s ease-in-out;
     position: absolute;
-    bottom: 110%;
+    bottom: 105%;
     left: 50%;
     transform: translateX(-50%);
     background-color: transparent;
-    color: #000000;
+    color: #525252;
     padding: 5px 10px;
     white-space: nowrap;
+    animation: color-change 3s infinite;
 }
+
+@keyframes color-change {
+    0% { color: #3d3d3d; }
+    50% { color: #a8a8a8; }
+    100% { color: #3d3d3d; }
+  }
 
 .typing-area .input-area .voice-btn-record-big:hover {
     transform: scale(0.9);
@@ -513,12 +520,10 @@
 
 
 .chatbox-container .chatbox-sample h5{
-    font-weight: 700;
-    font-size: 1.25rem;
-    margin-bottom: 1rem;
-    font-family: inherit;
-    font-weight: 500;
-    line-height: 2.5;
+    font-size: 24px;
+    margin-bottom: 16px;
+    font-weight: 600;
+    line-height: 2;
     color: inherit;
 }
 

@@ -51,7 +51,6 @@
 
 .header-container img {
     height: 45vh;
-    position: absolute;
     bottom: 4rem;
     /* margin-top: 20px; */
     animation: updown 3s linear infinite;

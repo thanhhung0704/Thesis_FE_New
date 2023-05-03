@@ -33,6 +33,7 @@
 .navbar li a {
     color: #1488D8;
     font-size: 18px;
+    font-weight: 550;
     transition: all 0.5s ease;
     cursor: pointer;
 }

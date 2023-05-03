@@ -382,7 +382,7 @@
 
 .typing-area .input-area .voice-btn-record-big::before{
     pointer-events: none;
-    content: "Hold to Speak";
+    content: "Giữ để Nói";
     font-size: 1.5rem;
     visibility: visible;
     opacity: 1;

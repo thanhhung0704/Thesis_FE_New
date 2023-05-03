@@ -349,6 +349,8 @@
     cursor: pointer;
 }
 
+
+
 .typing-area .input-area .voice-btn-big {
     color: #fff;
     right: 25%;
@@ -378,9 +380,29 @@
     z-index: 1;
 }
 
+.typing-area .input-area .voice-btn-record-big::before{
+    pointer-events: none;
+    content: "Hold to Speak";
+    font-size: 1.5rem;
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.3s ease-in-out;
+    position: absolute;
+    bottom: 110%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: transparent;
+    color: #000000;
+    padding: 5px 10px;
+    white-space: nowrap;
+}
+
 .typing-area .input-area .voice-btn-record-big:hover {
     transform: scale(0.9);
     box-shadow: none;
+}
+.typing-area .input-area .voice-btn-record-big:hover::before{
+    opacity: 0;
 }
 
 .typing-area .input-area .pulse {

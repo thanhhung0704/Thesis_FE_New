@@ -97,6 +97,8 @@ function ChatBox() {
         const formData = new FormData();
         formData.append('conversation_id', conversation_id);
         formData.append('file', audio, fileName);
+
+        console.log(formData);
         
     
         axios.post('http://localhost:8002/api/v1/stt', formData, {

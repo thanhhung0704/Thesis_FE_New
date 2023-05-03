@@ -109,10 +109,10 @@ function ChatBox() {
             console.log(parseData.context);
             setChatLog((prevChatLog) => [...prevChatLog, { type: 'user', message: parseData.question }])
             if(response.data.end_position === 1 || response.data.end_position === -1 ) {
-                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.response), isContext:false  }])
+                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.policy_response), isContext:false, messagePolicy: parseData.policy_response}])
             }
             else {
-                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.response), isContext:true  }])
+                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.policy_response), isContext:true, messagePolicy: parseData.policy_response}])
             }
             // if(parseData.response !== '') {
             //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.response)  }])
@@ -156,6 +156,8 @@ function ChatBox() {
             "utterance": message,
             "conversation_id": conversation_id
         };
+
+        // console.log(data)
     
         setIsLoading(true);
     
@@ -163,10 +165,10 @@ function ChatBox() {
           console.log(response.data);
           console.log(response.data.context);
           if(response.data.end_position === 1 || response.data.end_position === -1 ) {
-            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.response), isContext: false }])
+            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.policy_response), isContext: false, messagePolicy: response.data.policy_response  }])
           }
           else {
-            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.response), isContext: true }])
+            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.policy_response), isContext: true, messagePolicy: response.data.policy_response }])
           }
         //   if(response.data.response !== '') {
         //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.response) }])
@@ -228,7 +230,7 @@ function ChatBox() {
                                 (!message.isContext  ? (
                                     <div key={index} className={`chat bot-message `}>
                                     <div ref={lastMessageRef} className="details">
-                                        <div className='content'>{message.message}</div>
+                                        <div className='bot-message-content'>{message.message}</div>
                                         {/* <div className='footer'>
                                             <Modal content={message.context}/>
                                         </div> */}
@@ -237,7 +239,8 @@ function ChatBox() {
                                 ):(
                                 <div key={index} className={`chat bot-message `}>
                                     <div ref={lastMessageRef} className="details">
-                                        <div className='content'>{message.message}</div>
+                                        <div className='bot-message-content'>{message.message}</div>
+                                        <div className='bot-message-policy'>{message.messagePolicy}</div>
                                         <div className='footer'>
                                             <Modal content={message.context}/>
                                         </div>

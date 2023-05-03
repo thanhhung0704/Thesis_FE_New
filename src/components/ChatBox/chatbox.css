@@ -65,7 +65,7 @@
     margin-top: 24px;
     /* height: 60vh; */
     /* overflow-y: auto; */
-    padding: 10px 15px 42px 15px;
+    padding: 10px 3rem 42px 3rem;
 }
   
 .chat-content .text{
@@ -120,10 +120,17 @@
     box-shadow: 0px 0.3px 0.9px rgba(0, 0, 0, 0.2), 0px 1.6px 3.6px rgba(0, 0, 0, 0.3);
 }
 
-.chat-content .bot-message .details .content {
+.chat-content .bot-message .details .bot-message-content {
     display: flex;
     word-wrap: break-word;
     padding: 10px 16px;
+}
+
+.chat-content .bot-message .details .bot-message-policy {
+    display: flex;
+    word-wrap: break-word;
+    padding: 0px 16px 10px 16px;
+    font-weight: 700;
 }
 
 .chat-content .bot-message .details .footer {

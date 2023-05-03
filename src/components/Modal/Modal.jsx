@@ -28,7 +28,7 @@ function Modal(props) {
 
   return (
     <>
-      <button className="modal-btn" onClick={handleOpenModal}>Xem thêm</button>
+      <button className="modal-btn" onClick={handleOpenModal}>Xem chi tiết</button>
       {showModal && (
         <div className="modal">
           <div className="modal-content-outer">

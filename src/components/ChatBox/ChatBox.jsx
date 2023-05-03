@@ -99,7 +99,7 @@ function ChatBox() {
         formData.append('file', audio, fileName);
         
     
-        axios.post('http://localhost:8001/api/v1/stt', formData, {
+        axios.post('http://localhost:8002/api/v1/stt', formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -149,7 +149,7 @@ function ChatBox() {
     }
 
     const sendMessage = (message) => {
-        const url = 'http://localhost:8002/api/v1/qa';
+        const url = 'http://localhost:8001/api/v1/intent_entity_classify';
     
         const data = {
             "context": '',

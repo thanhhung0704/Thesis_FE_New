@@ -7,6 +7,7 @@ import {BsChatLeftTextFill} from 'react-icons/bs'
 import {GiMagicBroom} from 'react-icons/gi'
 import fixWebmDuration from "fix-webm-duration";
 import { useState, useRef, useEffect } from 'react'
+import { v4 as uuidv4 } from 'uuid';
 import Modal from '../Modal/Modal'
 import axios from 'axios';
 
@@ -37,7 +38,7 @@ function ChatBox() {
 
     useEffect(() => {
         // const uuid = crypto.randomUUID();
-        setConversation_id(crypto.randomUUID());
+        setConversation_id(uuidv4());
     }, []);
 
     
@@ -58,7 +59,7 @@ function ChatBox() {
         setIsLoading(false);
         setIsLoadingVoice(false);
         setChatLog(([{ type: 'bot', message: 'Bạn muốn hỏi câu gì tiếp theo?', context: '' }]));
-        setConversation_id(crypto.randomUUID());
+        setConversation_id(uuidv4());
 
     }
 
@@ -208,9 +209,9 @@ function ChatBox() {
 
   return (
     <div className='chatbox-wrapper'>
-        {/* {conversation_id && (
+        {conversation_id && (
         <p>Session ID: {conversation_id}</p>
-      )} */}
+      )}
         {/* {audioURL && <audio src={audioURL} controls />} */}
         <div className="display-area">
             <div className="chatbox-container">

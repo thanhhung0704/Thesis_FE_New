@@ -209,9 +209,9 @@ function ChatBox() {
 
   return (
     <div className='chatbox-wrapper'>
-        {conversation_id && (
+        {/* {conversation_id && (
         <p>Session ID: {conversation_id}</p>
-      )}
+      )} */}
         {/* {audioURL && <audio src={audioURL} controls />} */}
         <div className="display-area">
             <div className="chatbox-container">

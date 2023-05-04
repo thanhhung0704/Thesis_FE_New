@@ -8,7 +8,7 @@ import './App.css'
 function App() {
   return (
     <div>
-        <Router>
+        <Router basename='/bkheart'>
         <div >
         <Routes>
           <Route exact path="/" element = {<HomePage />}></Route>

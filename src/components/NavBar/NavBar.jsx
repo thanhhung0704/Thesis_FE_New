@@ -5,6 +5,7 @@ import './navbar.css'
 import logo from '../../assets/logoBK.png'
 import { useState } from 'react'
 import { Link } from 'react-scroll'
+import { NavLink } from 'react-router-dom'
 
 function NavBar() {
     const[click,setClick] = useState(false)
@@ -25,9 +26,9 @@ return (
                     {click ? (<AiOutlineClose className = 'icon' />) :(<HiOutlineMenuAlt4 className='icon' />)}
                     
             </div>
-            <a href="/" className='logo'>
+            <NavLink to="/" className='logo'>
                 <img src={logo} alt="Logo here"/>
-            </a>
+            </NavLink>
             <ul className={click ? 'nav-menu active' : 'nav-menu'}>
                 <li><Link activeClass="active" to="header-section" spy={true} smooth={true} offset={-100} duration={100}>GIỚI THIỆU</Link></li>
                 <li><Link activeClass="active" to="feature-section" spy={true} smooth={true} offset={-80} duration={100} >TÍNH NĂNG</Link></li>

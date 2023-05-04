@@ -102,7 +102,7 @@ function ChatBox() {
         console.log(formData);
         
     
-        axios.post('http://localhost:8002/api/v1/stt', formData, {
+        axios.post('http://172.28.10.73:8002/api/v1/stt', formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -152,7 +152,7 @@ function ChatBox() {
     }
 
     const sendMessage = (message) => {
-        const url = 'http://localhost:8001/api/v1/intent_entity_classify';
+        const url = 'http://172.28.10.73:8001/api/v1/intent_entity_classify';
     
         const data = {
             "context": '',

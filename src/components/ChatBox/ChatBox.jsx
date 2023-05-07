@@ -9,11 +9,13 @@ import fixWebmDuration from "fix-webm-duration";
 import { useState, useRef, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import Modal from '../Modal/Modal'
+import FeedbackForm from '../FeedbackForm/feedbackForm'
 import axios from 'axios';
 
 
 function ChatBox() {
     const ENTER_KEY_CODE = 13;
+    const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT
     // const [message, setMessage] = useState('');
     const [isRecording, setIsRecording] = useState(false);
     const [isPress, setIsPress] = useState(false)
@@ -102,7 +104,7 @@ function ChatBox() {
         console.log(formData);
         
     
-        axios.post('https://cse.hcmut.edu.vn/bkheart/api/v1/stt', formData, {
+        axios.post(`${API_ENDPOINT}/speech`, formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -152,7 +154,7 @@ function ChatBox() {
     }
 
     const sendMessage = (message) => {
-        const url = 'https://cse.hcmut.edu.vn/bkheart/api/intent_entity_classify';
+        const url = `${API_ENDPOINT}/text`;
     
         const data = {
             "context": '',
@@ -209,6 +211,8 @@ function ChatBox() {
 
   return (
     <div className='chatbox-wrapper'>
+        {/* <FeedbackForm />
+        <Modal /> */}
         {/* {conversation_id && (
         <p>Session ID: {conversation_id}</p>
       )} */}

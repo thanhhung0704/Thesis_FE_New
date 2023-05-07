@@ -113,11 +113,12 @@ function ChatBox() {
             const parseData = response.data;
             console.log(parseData.context);
             setChatLog((prevChatLog) => [...prevChatLog, { type: 'user', message: parseData.utterance }])
-            // if(response.data.end_position === 1 || response.data.end_position === -1 ) {
-            //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.policy_response), isContext:false, messagePolicy: parseData.policy_response}])
-            // }
-            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.policy_response), isContext:true, messagePolicy: parseData.policy_response}])
-    
+            if(response.data.end_position === -1 ) {
+                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.policy_response), isContext:false, messagePolicy: parseData.policy_response}])
+            }
+            else {
+                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.policy_response), isContext:true, messagePolicy: parseData.policy_response}])
+            }
             // if(parseData.response !== '') {
             //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.response)  }])
             // }
@@ -166,13 +167,14 @@ function ChatBox() {
         setIsLoading(true);
     
         axios.post(url, data).then((response) => {
-            console.log(response.data);
-            console.log(response.data.context);
-        //   if(response.data.end_position === 1 || response.data.end_position === -1 ) {
-        //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.policy_response), isContext: false, messagePolicy: response.data.policy_response  }])
-        //   }
+          console.log(response.data);
+          console.log(response.data.context);
+          if(response.data.end_position === -1 ) {
+            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.policy_response), isContext: false, messagePolicy: response.data.policy_response  }])
+          }
+          else {
             setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.policy_response), isContext: true, messagePolicy: response.data.policy_response }])
-
+          }
         //   if(response.data.response !== '') {
         //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.response) }])
         //   }
@@ -180,7 +182,7 @@ function ChatBox() {
         //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: 'Không tìm thấy câu trả lời!', context: '' }])
         //   }
           
-            setIsLoading(false);
+          setIsLoading(false);
         }).catch((error) => {
           setIsLoading(false);
           console.log(error);

@@ -30,8 +30,8 @@ return (
                 <img src={logo} alt="Logo here"/>
             </NavLink>
             <ul className={click ? 'nav-menu active' : 'nav-menu'}>
-                <li><Link activeClass="active" to="header-section" spy={true} smooth={true} offset={-100} duration={100}>GIỚI THIỆU</Link></li>
-                <li><Link activeClass="active" to="feature-section" spy={true} smooth={true} offset={-80} duration={100} >TÍNH NĂNG</Link></li>
+                <li><Link activeClass="active" to="header-section" spy={true} smooth={true} offset={-80} duration={100}>GIỚI THIỆU</Link></li>
+                <li><Link activeClass="active" to="feature-section" spy={true} smooth={true} offset={-70} duration={100} >TÍNH NĂNG</Link></li>
                 <li><Link activeClass="active" to="example-section" spy={true} smooth={true} offset={-70} duration={100}>CÂU HỎI MẪU</Link></li>
             </ul>
             <button className='btn'>Đăng Nhập</button>

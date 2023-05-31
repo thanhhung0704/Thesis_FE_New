@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 .example-container {
-    /* height: calc(100vh - 68px); */
+    position: relative;
+    min-height: calc(100vh - 68px); 
     display: flex;
     align-items: center;
     flex-direction: column;

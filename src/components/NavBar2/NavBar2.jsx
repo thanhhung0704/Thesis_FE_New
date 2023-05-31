@@ -31,7 +31,7 @@ function NavBar2() {
                 {/* <li><a href="">Contact</a></li> */}
             </ul>
             <button className='btn'>Đăng Nhập</button>
-            
+            <div onClick={handleClick} className={click ? 'overlay active' : 'overlay'}></div>
         </div>
     </div>
   )

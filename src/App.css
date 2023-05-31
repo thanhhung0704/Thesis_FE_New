@@ -31,7 +31,7 @@ footer {
     display: block;
     text-align: center;
     padding: 15px 0;
-    margin-top: 60px;
+    /* margin-top: 60px; */
     color: #777;
     border-top: 1px solid #eaeaea;
 }
@@ -103,9 +103,27 @@ footer {
 }
 
 .section-padding {
-  padding: 3rem 6rem;
+  padding: 2.5rem 5rem;
 }
 
 .section-margin {
   margin: 3rem 6rem;
+}
+
+@media only screen and (max-width: 1024px) {
+    body {
+        padding-top: 68px;
+    }
+    .section-padding {
+        padding: 2rem 4rem;
+    }
+}
+
+@media only screen and (max-width: 768px){
+    body {
+        padding-top: 68px;
+    }
+    .section-padding {
+        padding: 2rem 4rem;
+    }
 }

@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Noto+Serif:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 .example-container {
-    height: calc(100vh - 68px);
+    /* height: calc(100vh - 68px); */
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -10,7 +10,7 @@
 }
 
 .example-container .text-wrapper {
-    padding-bottom: 96px;
+    padding-bottom: 80px;
     max-width: 1200px;
     text-align: center;
     display: flex;
@@ -39,7 +39,7 @@
     display: flex;
     justify-content: space-evenly;
     flex-wrap: wrap;
-    padding-bottom: 96px;
+    padding-bottom: 50px;
 }
 
 .example-container .example-wrapper .example-item {
@@ -47,7 +47,7 @@
     flex-direction: column;
     align-items: center;
     flex: 1; */
-    height: 250px;
+    /* height: 250px; */
     padding: 20px;
 
     /* border: 2px solid #1488d8; */
@@ -100,4 +100,21 @@
 
 .example-container .btn:hover {
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.4);
+}
+
+@media only screen and (max-width: 1024px) {
+    .example-container .text-wrapper h1 {
+        font-size: 40px;
+    }
+
+}
+
+
+@media only screen and (max-width: 768px) {
+    .example-container .text-wrapper h1 {
+        font-size: 36px;
+    }
+    .example-container .text-wrapper {
+        padding-bottom: 40px;
+    }
 }

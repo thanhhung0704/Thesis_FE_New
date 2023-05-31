@@ -2,21 +2,22 @@ import React from 'react'
 import './chatbox.css'
 // import { BiSearchAlt} from 'react-icons/bi'
 import {TbSend} from 'react-icons/tb'
-import {FaMicrophone, FaRegKeyboard} from 'react-icons/fa'
+import {FaMicrophone, FaRegKeyboard, FaTimes, FaHistory} from 'react-icons/fa'
 import {BsChatLeftTextFill} from 'react-icons/bs'
 import {GiMagicBroom} from 'react-icons/gi'
 import fixWebmDuration from "fix-webm-duration";
 import { useState, useRef, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
 import Modal from '../Modal/Modal'
-import FeedbackForm from '../FeedbackForm/feedbackForm'
+//import FeedbackForm from '../FeedbackForm/feedbackForm'
 import axios from 'axios';
 
 
 function ChatBox() {
     const ENTER_KEY_CODE = 13;
-    const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT
+    //const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT
     // const [message, setMessage] = useState('');
+    const [isClickHistory, setIsClickHistory] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
     const [isPress, setIsPress] = useState(false)
     const [isInput, setIsInput] = useState(false);
@@ -104,7 +105,7 @@ function ChatBox() {
         console.log(formData);
         
     
-        axios.post(`${API_ENDPOINT}/speech`, formData, {
+        axios.post('/speech', formData, {
         headers: {
             'Content-Type': 'multipart/form-data'
         }
@@ -154,7 +155,7 @@ function ChatBox() {
     }
 
     const sendMessage = (message) => {
-        const url = `${API_ENDPOINT}/text`;
+        const url = '/text';
     
         const data = {
             "context": '',
@@ -209,6 +210,10 @@ function ChatBox() {
         }
     }
 
+    const handleHistoryBtn = () => {
+        setIsClickHistory(!isClickHistory)
+    }
+
   return (
     <div className='chatbox-wrapper'>
         {/* <FeedbackForm />
@@ -218,6 +223,9 @@ function ChatBox() {
       )} */}
         {/* {audioURL && <audio src={audioURL} controls />} */}
         <div className="display-area">
+            <div onClick={handleHistoryBtn} className={isClickHistory? "history-btn" : "history-btn history-btn-active"}>
+                <FaHistory />
+            </div>
             <div className="chatbox-container">
                 <div className="chatbox-area">
                     <div className="welcome-container">
@@ -272,8 +280,14 @@ function ChatBox() {
                         }
                     </div>
                 </div>
-                <div className="chatbox-sample">
-                    <h5>Lịch sử chat</h5>
+                <div className={ !isClickHistory? 'chatbox-sample': 'chatbox-sample chat-box-sample-active'}>
+                    {
+                        isClickHistory? (<span className="close" onClick={handleHistoryBtn}>
+                        &times;
+                        </span>):null
+                    }
+                    
+                    <h1 className='sample-title'>Lịch sử chat</h1>
                     {/* <div className="sample-card">
                         <div>
                             <div className="sample-item">
@@ -286,12 +300,12 @@ function ChatBox() {
                             chatLog.map((message, index) => (
                                 message.type === 'user' ?
                                 (<div key={index} className="sample-card">
-                                <div>
+                    
                                     <div className="sample-item">
                                         <BsChatLeftTextFill className='history-icon'/>
                                         <p className="sample-description">{message.message}</p>
                                     </div>
-                                </div>
+                    
                             </div>):
                                 null
                             ))
@@ -300,61 +314,65 @@ function ChatBox() {
             </div>
         </div>
         <div className="typing-area">
-            <div className={`input-area ${isClick ? 'input-area-small' : ''}  `}>
-                <input
-                    disabled = {isDisabled}
-                    type="text"
-                    className={`input-field ${isClick ? 'input-field-small' : ''}  `}
-                    placeholder='Nhập câu hỏi...'
-                    autoComplete='off'
-                    onChange= {handleInputText}
-                    onKeyDown={handleEnterKey}
-                    value = {inputValue}
-                />
-                <button
-                    className={`keyboard-btn ${isClick ? 'keyboard-btn-show' : ''}  `}
-                    onClick={handleClick}>
-                    <FaRegKeyboard className='send-btn-icon' />
-                </button>
-                <button
-                    className={`search-btn ${!isInput ? 'btn-hide' : ''}  `}
-                    onClick={handleSubmit}>
-                    <TbSend className='send-btn-icon' />
-                </button>
-                {isRecording ? (
+            <div className='typing-container'>
+                <div className={`input-area ${isClick ? 'input-area-small' : ''}  `}>
+                    <input
+                        disabled = {isDisabled}
+                        type="text"
+                        className={`input-field ${isClick ? 'input-field-small' : ''}  `}
+                        placeholder='Nhập câu hỏi...'
+                        autoComplete='off'
+                        onChange= {handleInputText}
+                        onKeyDown={handleEnterKey}
+                        value = {inputValue}
+                    />
                     <button
-                        className={`voice-btn-record ${isPress ? 'pulse' : ''} ${isInput ? 'btn-hide' : ''} ${isClick ? 'voice-btn-record-big' : ''}   `}
-                        onMouseLeave={handleStopRecording}
-                        onMouseUp={handleStopRecording}
-                    >
-                    ...
+                        className={`keyboard-btn ${isClick ? 'keyboard-btn-show' : ''}  `}
+                        onClick={handleClick}>
+                        <FaRegKeyboard className='send-btn-icon' />
                     </button>
-                ) : (<button
-                    className={`voice-btn-record ${isPress ? 'pulse' : ''} ${isInput ? 'btn-hide' : ''} ${isClick ? 'voice-btn-record-big' : ''}   `}
-                    onTouchStart={handleStartRecording}
-                    onMouseDown={handleStartRecording}
-                    >
-                        {
-                            isLoadingVoice && isClick  ?
-                            (<div className='spinner'>
-                                <div className="bubble-1"></div>
-                                <div className="bubble-2"></div>
-                            </div>) :
-                            (<FaMicrophone className='send-btn-icon' />)
+                    <button
+                        className={`search-btn ${!isInput ? 'btn-hide' : ''}  `}
+                        onClick={handleSubmit}>
+                        <TbSend className='send-btn-icon' />
+                    </button>
+                    {isRecording ? (
+                        <button
+                            className={`voice-btn-record ${isPress ? 'pulse' : ''} ${isInput ? 'btn-hide' : ''} ${isClick ? 'voice-btn-record-big' : ''}   `}
+                            // onMouseLeave={handleStopRecording}
+                            // onMouseUp={handleStopRecording}
+                            onClick={handleStopRecording}
+                        >
+                            <FaTimes />
+                        </button>
+                    ) : (<button
+                        className={`voice-btn-record ${isPress ? 'pulse' : ''} ${isInput ? 'btn-hide' : ''} ${isClick ? 'voice-btn-record-big' : ''}   `}
+                        onClick={handleStartRecording}
+                        // onMouseDown={handleStartRecording}
+                        >
+                            {
+                                isLoadingVoice && isClick  ?
+                                (<div className='spinner'>
+                                    <div className="bubble-1"></div>
+                                    <div className="bubble-2"></div>
+                                </div>) :
+                                (<FaMicrophone className='send-btn-icon' />)
+                                
+                            }
                             
-                        }
-                        
-                    </button>)}
-                
-                <button
-                    className={`voice-btn ${isInput ? 'btn-hide' : ''} ${isClick ? 'voice-btn-big' : ''}  `}
-                    onClick={handleClick}>
-                    <FaMicrophone className='send-btn-icon' />
+                        </button>)}
+                    
+                    <button
+                        className={`voice-btn ${isInput ? 'btn-hide' : ''} ${isClick ? 'voice-btn-big' : ''}  `}
+                        onClick={handleClick}>
+                        <FaMicrophone className='send-btn-icon' />
+                    </button>
+                </div>
+                <button className="new-chat-btn" onClick={handleClear}>
+                    <GiMagicBroom />
                 </button>
             </div>
-            <button className="new-chat-btn" onClick={handleClear}>
-                <GiMagicBroom />
-            </button>
+
         </div>
     </div>
     

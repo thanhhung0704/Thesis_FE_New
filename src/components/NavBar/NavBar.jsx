@@ -35,7 +35,7 @@ return (
                 <li><Link activeClass="active" to="example-section" spy={true} smooth={true} offset={-70} duration={100}>CÂU HỎI MẪU</Link></li>
             </ul>
             <button className='btn'>Đăng Nhập</button>
-            
+            <div onClick={handleClick} className={click ? 'overlay active' : 'overlay'}></div>
         </div>
     </div>
   )

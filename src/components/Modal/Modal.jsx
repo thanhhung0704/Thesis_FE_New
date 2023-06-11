@@ -55,6 +55,7 @@ function Modal(props) {
       {showModal && (
         <div className="modal">
           <div className="modal-content-outer">
+              <h1 className="modal-header gradient-text">KẾT QUẢ TÌM KIẾM</h1>
               <span className="close" onClick={handleCloseModal}>
                 &times;
               </span>
@@ -84,7 +85,7 @@ function Modal(props) {
                       index === currentPage ? "active" : ""
                     }`}
                     onClick={() => handleDotClick(index)}
-                  ></div>
+                  >{index}</div>
                 ))}
                 {currentPage < totalPages - 1 && (
                   <button className="pagination-btn" onClick={handleNextPage}><GrNext className="pagination-btn-icon"/></button>

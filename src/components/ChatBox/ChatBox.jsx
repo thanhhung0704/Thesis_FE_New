@@ -197,7 +197,7 @@ function ChatBox() {
 
           if(response.data.end_position === -1 ) {
             for(let i=0; i < response.data.response.length; i++){
-                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: contextList, isContext: false, messagePolicy: response.data.policy_response  }])
+                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response[i], context: contextList, isContext: false, messagePolicy: response.data.policy_response  }])
             }
           }
           else {
@@ -234,6 +234,8 @@ function ChatBox() {
     const handleHistoryBtn = () => {
         setIsClickHistory(!isClickHistory)
     }
+
+
 
   return (
     <div className='chatbox-wrapper'>

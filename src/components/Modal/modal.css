@@ -29,6 +29,8 @@
   .modal-content-outer {
     position: relative;
     display: flex;
+    flex-direction: column;
+    background-color: #fff;
     justify-content: center;
     align-items: center;
     z-index: 1000;
@@ -42,9 +44,9 @@
   
   .modal-content {
     position: relative;
-    background-color: white;
-    width: 100%;
-    height: 100%;
+    background-color: #fff;
+    width: 90%;
+    height: 80%;
     padding: 30px;
     /* border-radius: 5px; */
     overflow-y: auto;
@@ -93,17 +95,42 @@
     width: 10px;
     height: 10px;
     border-radius: 50%;
-    background-color: #ccc;
+    background-color: #69b3e4;
     margin: 0 5px;
     cursor: pointer;
-  }
-  
-  .pagination-dot.active {
-    background-color: #000;
+    transition: all 0.3s;
   }
 
-  .pagination-btn-left {
+  .pagination-dot.active,
+  .pagination-dot:hover {
+    background-color: #030391;
+  }
+
+  .pagination-btn {
     /* Styles for the previous and next buttons */
+    /* position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%); */
+    display: flex;
+    align-items: center;
+    border: none;
+    background-color: #1488d8;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    outline: none;
+    margin: 0 8px;
+    padding: 5px;
+    z-index: 1000;
+    transition: all 0.3s;
+  }
+
+  .pagination-btn-icon polyline {
+    stroke: #ffffff;
+  }
+  /* .pagination-btn-left {
     position: absolute;
     left: 0;
     top: 50%;
@@ -119,7 +146,6 @@
   }
 
   .pagination-btn-right {
-    /* Styles for the previous and next buttons */
     position: absolute;
     top: 50%;
     right: 0;
@@ -132,11 +158,11 @@
     outline: none;
     padding: 5px;
     z-index: 1000;
-  }
+  } */
   
   .pagination-btn:hover {
     /* Styles for the hover state of the buttons */
-    background-color: #f0f0f0;
+    opacity: 0.8;
   }
 
   

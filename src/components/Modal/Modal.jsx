@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {GrNext, GrPrevious} from 'react-icons/gr'
+import {GrNext, GrPrevious, GrFormNext, GrFormPrevious} from 'react-icons/gr'
 import "./modal.css";
 
 function Modal(props) {
@@ -22,9 +22,9 @@ function Modal(props) {
     setCurrentPage((prevPage) => prevPage + 1);
   };
 
-  // const handleDotClick = (pageIndex) => {
-  //   setCurrentPage(pageIndex);
-  // };
+  const handleDotClick = (pageIndex) => {
+    setCurrentPage(pageIndex);
+  };
 
   useEffect(() => {
     const handleClickOutsideModal = (event) => {
@@ -55,27 +55,27 @@ function Modal(props) {
       {showModal && (
         <div className="modal">
           <div className="modal-content-outer">
-          {currentPage > 0 && (
+              <span className="close" onClick={handleCloseModal}>
+                &times;
+              </span>
+              {/* {currentPage > 0 && (
                   <button className="pagination-btn-left" onClick={handlePreviousPage}><GrPrevious color="white" className="pagination-btn-icon"/></button>
                 )}
               {currentPage < totalPages - 1 && (
                   <button className="pagination-btn-right" onClick={handleNextPage}><GrNext color="white" className="pagination-btn-icon" /></button>
-                )}
+                )} */}
             <div className="modal-content">
-              <span className="close" onClick={handleCloseModal}>
-                &times;
-              </span>
+              
               {displayedContents.map((content, index) => (
                 <div key={index}>
                   <div dangerouslySetInnerHTML={{ __html: content }}></div>
                   {/* <hr /> */}
                 </div>
               ))}
-              
-              
-              {/* <div className="pagination">
+            </div>
+            <div className="pagination">
                 {currentPage > 0 && (
-                  <button className="pagination-btn-left" onClick={handlePreviousPage}><GrPrevious /></button>
+                  <button className="pagination-btn" onClick={handlePreviousPage}><GrPrevious className="pagination-btn-icon" /></button>
                 )}
                 {Array.from({ length: totalPages }, (_, index) => (
                   <div
@@ -87,10 +87,9 @@ function Modal(props) {
                   ></div>
                 ))}
                 {currentPage < totalPages - 1 && (
-                  <button className="pagination-btn-right" onClick={handleNextPage}><GrNext /></button>
+                  <button className="pagination-btn" onClick={handleNextPage}><GrNext className="pagination-btn-icon"/></button>
                 )}
-              </div> */}
-            </div>
+              </div>
           </div>
         </div>
       )}

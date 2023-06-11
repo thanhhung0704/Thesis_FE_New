@@ -8,6 +8,7 @@ import {GiMagicBroom} from 'react-icons/gi'
 import fixWebmDuration from "fix-webm-duration";
 import { useState, useRef, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid';
+// import FeedbackForm from '../FeedbackForm/feedbackForm'
 import Modal from '../Modal/Modal'
 //import FeedbackForm from '../FeedbackForm/feedbackForm'
 import axios from 'axios';
@@ -15,8 +16,6 @@ import axios from 'axios';
 
 function ChatBox() {
     const ENTER_KEY_CODE = 13;
-    //const API_ENDPOINT = process.env.REACT_APP_API_ENDPOINT
-    // const [message, setMessage] = useState('');
     const [isClickHistory, setIsClickHistory] = useState(false);
     const [isRecording, setIsRecording] = useState(false);
     const [isPress, setIsPress] = useState(false)
@@ -29,8 +28,8 @@ function ChatBox() {
     const [isLoadingVoice, setIsLoadingVoice] = useState(false);
     const [conversation_id, setConversation_id] = useState(null);
     const lastMessageRef = useRef(null);
-
-    // const [audioURL, setAudioURL] = useState('');
+    const [isSmallScreen, setIsSmallScreen] = useState(false);
+    const buttonRef = useRef(null);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     let chunks = [];
 
@@ -42,7 +41,32 @@ function ChatBox() {
     useEffect(() => {
         // const uuid = crypto.randomUUID();
         setConversation_id(uuidv4());
+        const handleResize = () => {
+            setIsSmallScreen(window.innerWidth < 768); // Adjust the breakpoint as needed
+          };
+      
+          handleResize(); // Set the initial screen size
+          window.addEventListener('resize', handleResize); // Listen for window resize events
+      
+          return () => {
+            window.removeEventListener('resize', handleResize); // Cleanup the event listener
+          };
     }, []);
+
+    useEffect(() => {
+        const handleKeyDown = (event) => {
+          if (event.keyCode === 32) { // Check if spacebar key was pressed
+            event.preventDefault(); // Prevent the default spacebar behavior (scrolling)
+            buttonRef.current.click(); // Trigger the button click event
+          }
+        };
+    
+        document.addEventListener('keydown', handleKeyDown);
+    
+        return () => {
+          document.removeEventListener('keydown', handleKeyDown);
+        };
+      }, []);
 
     
     function boldString(str, substr) {
@@ -110,23 +134,20 @@ function ChatBox() {
             'Content-Type': 'multipart/form-data'
         }
         }).then(response => {
-            console.log(response.data);
+            // console.log(response.data);
             const parseData = response.data;
-            console.log(parseData.context);
+            // console.log(parseData.context);
             setChatLog((prevChatLog) => [...prevChatLog, { type: 'user', message: parseData.utterance }])
+
+            const contextList = parseData.context.map((item) => boldString(item, parseData.policy_response));
+
             if(response.data.end_position === -1 ) {
-                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.policy_response), isContext:false, messagePolicy: parseData.policy_response}])
+                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: contextList, isContext:false, messagePolicy: parseData.policy_response}])
             }
             else {
-                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.policy_response), isContext:true, messagePolicy: parseData.policy_response}])
+                setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: contextList, isContext:true, messagePolicy: parseData.policy_response}])
             }
-            // if(parseData.response !== '') {
-            //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: parseData.response, context: boldString(parseData.context, parseData.response)  }])
-            // }
-            // else if(parseData.response === ''){
-            //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: 'Không tìm thấy câu trả lời!', context: '' }])
-            // }
-            // navigate('/chat', { state:  parseData  });
+
             setIsLoadingVoice(false);
         }).catch((error) => {
             setIsLoadingVoice(false);
@@ -168,20 +189,16 @@ function ChatBox() {
         setIsLoading(true);
     
         axios.post(url, data).then((response) => {
-          console.log(response.data);
-          console.log(response.data.context);
+        //   console.log(response.data);
+        //   console.log(response.data.context);
+        const contextList = response.data.context.map((item) => boldString(item, response.data.policy_response));
+
           if(response.data.end_position === -1 ) {
-            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.policy_response), isContext: false, messagePolicy: response.data.policy_response  }])
+            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: contextList, isContext: false, messagePolicy: response.data.policy_response  }])
           }
           else {
-            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.policy_response), isContext: true, messagePolicy: response.data.policy_response }])
+            setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: contextList, isContext: true, messagePolicy: response.data.policy_response }])
           }
-        //   if(response.data.response !== '') {
-        //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: boldString(response.data.context, response.data.response) }])
-        //   }
-        //   else if(response.data.response === ''){
-        //     setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: 'Không tìm thấy câu trả lời!', context: '' }])
-        //   }
           
           setIsLoading(false);
         }).catch((error) => {
@@ -213,11 +230,17 @@ function ChatBox() {
     const handleHistoryBtn = () => {
         setIsClickHistory(!isClickHistory)
     }
+    // const testLst = [
+    //     "QUY ĐỊNH CHUNG VỀ HỌC VỤ VÀ ĐÀO TẠO\nPHỤ LỤC 5\nQUY ĐỊNH VỀ HOÀN TRẢ HỌC PHÍ\n\n3. Thời điểm hoàn trả học phí\n\nNhà trường thực hiện việc hoàn trả học phí vào các tuần trước tuần giữa học kỳ và tuần sau tuần cuối học kỳ, ngoại trừ các trường hợp khẩn cấp.\n",
+    //     "QUY ĐỊNH CHUNG VỀ HỌC VỤ VÀ ĐÀO TẠO\nPHỤ LỤC 5\nQUY ĐỊNH VỀ HOÀN TRẢ HỌC PHÍ\n\n2. Các trường hợp được hoàn trả học phí\n\n2.1. Trúng tuyển và nhập học\nNgười học không nhập học hoặc đã bảo lưu kết quả trúng tuyển, được hoàn trả học phí. Thời điểm tối đa để làm thủ tục hoàn trả học phí là cuối học kỳ nhập học.\nNgười học rút nhập học hoặc bị huỷ kết quả trúng tuyển hoặc huỷ nhập học hoặc không công nhận người học được hoàn trả học phí nếu thời điểm làm thủ tục hoàn trả dưới 04 tuần tính từ ngày bắt đầu học của đợt tuyển sinh.\n2.2. Thôi học, tạm dừng\nNgười học thuộc các trường hợp sau được hoàn trả học phí nếu thời điểm làm thủ tục hoàn trả dưới 04 tuần tính từ ngày đầu học kỳ:\n- Thôi học theo yêu cầu cá nhân từ học kỳ tính học phí;\n- Bị buộc thôi học hoặc xoá tên, nhưng không phải là bị kỷ luật, từ học kỳ tính học phí;\n- Tạm dừng học hoặc bị tạm dừng học từ học kỳ tính học phí, ngoại trừ học kỳ bị tạm dừng vì không thanh toán học phí.\n2.3. Tính lại học phí\nNgười học huỷ đăng ký một số học phần đã đăng ký và làm giảm học phí cần thanh toán, nhà trường sẽ hoàn trả phần dư nếu thời gian huỷ đăng ký trong 02 tuần đầu học kỳ hoặc tối đa trong 06 tuần đầu học kỳ nếu có lý do chính đáng.\nTrường hợp người học đã nộp tạm ứng nhiều hơn học phí cần thanh toán, nhà trường sẽ hoàn lại phần dư. Thời hạn tối đa làm thủ tục hoàn phần dư học phí là 01 học kỳ tính từ học kỳ đã tạm ứng dư. Trường hợp đặc biệt sẽ do Hiệu trưởng quyết định.\n",
+    //     "QUY ĐỊNH CHUNG VỀ HỌC VỤ VÀ ĐÀO TẠO\nCHƯƠNG 6\nHỌC PHÍ\n\nĐiều 23. Học phí\n\n2. Thanh toán học phí\nNgười học phải thanh toán học phí đủ và đúng hạn để hoàn tất đăng ký học phần và có lịch học. Nhà trường có thể yêu cầu người học tạm nộp trước toàn bộ hoặc một phần học phí để đảm bảo việc tổ chức lớp học đạt hiệu quả tốt.\n3. Miễn, giảm, hoãn học phí\nNgười học diện được xét miễn, giảm học phí theo chính sách thực hiện theo quy trình của nhà trường.\nCác trường hợp gặp khó khăn đột xuất, người học có thể xin hoãn nộp học phí hoặc các hỗ trợ tài chính khác. Chỉ xét hoãn, miễn hay giảm học phí và các hỗ trợ tài chính khác cho người học đại học chính quy bằng thứ nhất tại các học kỳ chính, không xét cho các học kỳ phụ và các lớp dự thính.\n4. Hoàn trả học phí\nNgười học được xem xét hoàn trả học phí trong trường hợp thanh toán học phí dư, phần dư của học phí tạm ứng sau khi khấu trừ học phí và một số trường hợp đặc biệt khác. Phần dư của học phí tạm ứng có thể được dùng để cấn trừ vào học phí của học kỳ kế tiếp."
+    // ]
+    // const processLst = testLst.map((item) => boldString(item, "Nhà trường thực hiện việc hoàn trả học phí vào các tuần trước tuần giữa học kỳ"))
 
   return (
     <div className='chatbox-wrapper'>
-        {/* <FeedbackForm />
-        <Modal /> */}
+        {/* <FeedbackForm /> */}
+        {/* <Modal contents={processLst}/> */}
         {/* {conversation_id && (
         <p>Session ID: {conversation_id}</p>
       )} */}
@@ -257,7 +280,7 @@ function ChatBox() {
                                         <div className='bot-message-content'>{message.message}</div>
                                         <div className='bot-message-policy'>{message.messagePolicy}</div>
                                         <div className='footer'>
-                                            <Modal content={message.context}/>
+                                            <Modal contents={message.context}/>
                                         </div>
                                         
                                     </div>
@@ -337,18 +360,22 @@ function ChatBox() {
                         <TbSend className='send-btn-icon' />
                     </button>
                     {isRecording ? (
-                        <button
+                        <button ref={buttonRef}
                             className={`voice-btn-record ${isPress ? 'pulse' : ''} ${isInput ? 'btn-hide' : ''} ${isClick ? 'voice-btn-record-big' : ''}   `}
                             // onMouseLeave={handleStopRecording}
                             // onMouseUp={handleStopRecording}
-                            onClick={handleStopRecording}
+                            // onClick={isSmallScreen? handleStopRecording : null}
+                            onClick= {handleStopRecording}
+                            onMouseUp={isSmallScreen? null : handleStopRecording}
+                            onMouseLeave={isSmallScreen? null : handleStopRecording}
                         >
                             <FaTimes />
                         </button>
-                    ) : (<button
+                    ) : (<button ref={buttonRef}
                         className={`voice-btn-record ${isPress ? 'pulse' : ''} ${isInput ? 'btn-hide' : ''} ${isClick ? 'voice-btn-record-big' : ''}   `}
-                        onClick={handleStartRecording}
-                        // onMouseDown={handleStartRecording}
+                        // onClick={isSmallScreen? handleStartRecording : null}
+                        onClick= {handleStartRecording}
+                        onMouseDown={isSmallScreen? null : handleStartRecording}
                         >
                             {
                                 isLoadingVoice && isClick  ?

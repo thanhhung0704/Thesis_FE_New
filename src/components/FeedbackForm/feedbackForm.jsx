@@ -6,11 +6,56 @@ function FeedbackForm() {
     const [answerFound, setAnswerFound] = useState('');
     const [ruleMatch, setRuleMatch] = useState('');
     const [suggestions, setSuggestions] = useState('');
+    const [errors, setErrors] = useState({});
+    const [isSubmitted, setIsSubmitted] = useState(false);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // TODO: Handle the submission of the feedback
+
+        // Validate the form
+        const validationErrors = {};
+        if (!answerFound) {
+          validationErrors.answerFound = '*Please select an option';
+        }
+        if (!ruleMatch) {
+          validationErrors.ruleMatch = '*Please select an option';
+        }
+        if (!suggestions) {
+          validationErrors.suggestions = '*Please provide your suggestions';
+        }
+    
+        // If there are validation errors, set the state and return
+        if (Object.keys(validationErrors).length > 0) {
+          setErrors(validationErrors);
+          return;
+        }
+    
+        // Handle form submission logic here
+        console.log(answerFound, ruleMatch, suggestions);
+        setIsSubmitted(true);
+        setTimeout(() => {
+            setIsSubmitted(false); // Reset the submission status
+        }, 1000);
+        setAnswerFound('')
+        setRuleMatch('')
+        setSuggestions('')
+        setShowForm(false); // Close the feedback form after submission
+        setErrors({}); // Clear any existing errors
     };
+    const handleAnswerFoundChange = (e) => {
+        setAnswerFound(e.target.value);
+        setErrors({ ...errors, answerFound: '' }); // Clear error for answerFound
+      };
+      
+      const handleRuleMatchChange = (e) => {
+        setRuleMatch(e.target.value);
+        setErrors({ ...errors, ruleMatch: '' }); // Clear error for ruleMatch
+      };
+      
+      const handleSuggestionsChange = (e) => {
+        setSuggestions(e.target.value);
+        setErrors({ ...errors, suggestions: '' }); // Clear error for suggestions
+      };
 
     const handleOpenForm = () => {
         setShowForm(true);
@@ -38,23 +83,27 @@ function FeedbackForm() {
         <>
         <button className="open-form-btn" onClick={handleOpenForm}>Feedback</button>
         {
-            showForm && (
+            showForm && !isSubmitted && (
                 <div className="feedback-form-overlay">
                     <div className="feedback-form-container">
                         <span className="form-close" onClick={handleCloseForm}>
                                 &times;
                         </span>
-                        <h2 className='gradient-text'>Feedback</h2>
+                        <h2 className='gradient-text'>Phản hồi</h2>
                         <form onSubmit={handleSubmit}>
                             <div className="feedback-question">
-                                <p>Câu trả lời tìm được có đúng với điều bạn cần tìm ?</p>
+                                <p>Câu trả lời tìm được có đúng với điều bạn cần tìm ?
+                                    {errors.answerFound && (
+                                    <span className="error">{errors.answerFound}</span>
+                                    )}
+                                </p>
                                 <label>
                                 <input
                                     type="radio"
                                     name="answer-found"
-                                    value="Absolutely correct"
-                                    checked={answerFound === 'Absolutely correct'}
-                                    onChange={(e) => setAnswerFound(e.target.value)}
+                                    value="Đúng hoàn toàn"
+                                    checked={answerFound === 'Đúng hoàn toàn'}
+                                    onChange={handleAnswerFoundChange}
                                 />
                                 Đúng hoàn toàn
                                 </label>
@@ -62,9 +111,9 @@ function FeedbackForm() {
                                 <input
                                     type="radio"
                                     name="answer-found"
-                                    value="Partly correct"
-                                    checked={answerFound === 'Partly correct'}
-                                    onChange={(e) => setAnswerFound(e.target.value)}
+                                    value="Đúng một phần"
+                                    checked={answerFound === 'Đúng một phần'}
+                                    onChange={handleAnswerFoundChange}
                                 />
                                 Đúng một phần
                                 </label>
@@ -72,9 +121,9 @@ function FeedbackForm() {
                                 <input
                                     type="radio"
                                     name="answer-found"
-                                    value="There is an answer in the rules, but I can't answer it yet"
-                                    checked={answerFound === 'There is an answer in the rules, but I can\'t answer it yet'}
-                                    onChange={(e) => setAnswerFound(e.target.value)}
+                                    value="Có câu trả lời trong quy định tìm được nhưng chưa trả lời được"
+                                    checked={answerFound === 'Có câu trả lời trong quy định tìm được nhưng chưa trả lời được'}
+                                    onChange={handleAnswerFoundChange}
                                 />
                                 Có câu trả lời trong quy định tìm được nhưng chưa trả lời được
                                 </label>
@@ -82,22 +131,26 @@ function FeedbackForm() {
                                 <input
                                     type="radio"
                                     name="answer-found"
-                                    value="Irrelevant"
-                                    checked={answerFound === 'Irrelevant'}
-                                    onChange={(e) => setAnswerFound(e.target.value)}
+                                    value="Không liên quan"
+                                    checked={answerFound === 'Không liên quan'}
+                                    onChange={handleAnswerFoundChange}
                                 />
                                 Không liên quan
                                 </label>
                             </div>
                             <div className="feedback-question">
-                                <p>Đoạn quy định tìm được có ứng với điều bạn cần ?</p>
+                                <p>Đoạn quy định tìm được có ứng với điều bạn cần ?
+                                    {errors.ruleMatch && (
+                                        <span className="error">{errors.ruleMatch}</span>
+                                    )}
+                                </p>
                                 <label>
                                 <input
                                     type="radio"
                                     name="rule-match"
-                                    value="True to the top 1"
-                                    checked={ruleMatch === 'True to the top 1'}
-                                    onChange={(e) => setRuleMatch(e.target.value)}
+                                    value="Đúng với top 1"
+                                    checked={ruleMatch === 'Đúng với top 1'}
+                                    onChange={handleRuleMatchChange}
                                 />
                                 Đúng với top 1
                                 </label>
@@ -105,9 +158,9 @@ function FeedbackForm() {
                                 <input
                                     type="radio"
                                     name="rule-match"
-                                    value="True to the top 2"
-                                    checked={ruleMatch === 'True to the top 2'}
-                                    onChange={(e) => setRuleMatch(e.target.value)}
+                                    value="Đúng với top 2"
+                                    checked={ruleMatch === 'Đúng với top 2'}
+                                    onChange={handleRuleMatchChange}
                                 />
                                 Đúng với top 2
                                 </label>
@@ -115,9 +168,9 @@ function FeedbackForm() {
                                 <input
                                     type="radio"
                                     name="rule-match"
-                                    value="True to the top 3"
-                                    checked={ruleMatch === 'True to the top 3'}
-                                    onChange={(e) => setRuleMatch(e.target.value)}
+                                    value="Đúng với top 3"
+                                    checked={ruleMatch === 'Đúng với top 3'}
+                                    onChange={handleRuleMatchChange}
                                 />
                                 Đúng với top 3
                                 </label>
@@ -125,23 +178,32 @@ function FeedbackForm() {
                                 <input
                                     type="radio"
                                     name="rule-match"
-                                    value="Not found yet"
-                                    checked={ruleMatch === 'Not found yet'}
-                                    onChange={(e) => setRuleMatch(e.target.value)}
+                                    value="Chưa tìm được"
+                                    checked={ruleMatch === 'Chưa tìm được'}
+                                    onChange={handleRuleMatchChange}
                                 />
                                 Chưa tìm được
                                 </label>
                             </div>
                             <div className="feedback-question">
-                                <p>Bạn có góp ý gì thêm với hệ thống không ?</p>
+                                <p>Bạn có góp ý gì thêm với hệ thống không ?
+                                    {errors.suggestions && (
+                                        <span className="error">{errors.suggestions}</span>
+                                    )}
+                                </p>
                                 <textarea
                                 value={suggestions}
-                                onChange={(e) => setSuggestions(e.target.value)}
+                                onChange={handleSuggestionsChange}
                                 />
                             </div>
-                            <button type="submit" className='btn'>Submit</button>
+                            <button type="submit" className='btn'>Gửi phản hồi</button>
                         </form>
                     </div>
+                </div>
+            )}
+            {isSubmitted && (
+                <div className="feedback-form-thank-you">
+                    <p>Cảm ơn phản hồi của bạn!</p>
                 </div>
             )}
         </>

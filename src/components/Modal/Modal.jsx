@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
+import {GrNext, GrPrevious} from 'react-icons/gr'
 import "./modal.css";
 
 function Modal(props) {
   const [showModal, setShowModal] = useState(false);
+  const [currentPage, setCurrentPage] = useState(0);
 
   const handleOpenModal = () => {
     setShowModal(true);
@@ -11,6 +13,18 @@ function Modal(props) {
   const handleCloseModal = () => {
     setShowModal(false);
   };
+
+  const handlePreviousPage = () => {
+    setCurrentPage((prevPage) => prevPage - 1);
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage((prevPage) => prevPage + 1);
+  };
+
+  // const handleDotClick = (pageIndex) => {
+  //   setCurrentPage(pageIndex);
+  // };
 
   useEffect(() => {
     const handleClickOutsideModal = (event) => {
@@ -26,20 +40,58 @@ function Modal(props) {
     };
   }, []);
 
+  const totalPages = Math.ceil(props.contents.length / 1);
+
+  const displayedContents = props.contents.slice(
+    currentPage * 1,
+    (currentPage + 1) * 1
+  );
+
   return (
     <>
-      <button className="modal-btn" onClick={handleOpenModal}>Xem chi tiết</button>
+      <button className="modal-btn" onClick={handleOpenModal}>
+        Xem chi tiết
+      </button>
       {showModal && (
         <div className="modal">
           <div className="modal-content-outer">
+          {currentPage > 0 && (
+                  <button className="pagination-btn-left" onClick={handlePreviousPage}><GrPrevious color="white" className="pagination-btn-icon"/></button>
+                )}
+              {currentPage < totalPages - 1 && (
+                  <button className="pagination-btn-right" onClick={handleNextPage}><GrNext color="white" className="pagination-btn-icon" /></button>
+                )}
             <div className="modal-content">
               <span className="close" onClick={handleCloseModal}>
                 &times;
               </span>
-              <div dangerouslySetInnerHTML={{ __html: props.content}}></div>
+              {displayedContents.map((content, index) => (
+                <div key={index}>
+                  <div dangerouslySetInnerHTML={{ __html: content }}></div>
+                  {/* <hr /> */}
+                </div>
+              ))}
+              
+              
+              {/* <div className="pagination">
+                {currentPage > 0 && (
+                  <button className="pagination-btn-left" onClick={handlePreviousPage}><GrPrevious /></button>
+                )}
+                {Array.from({ length: totalPages }, (_, index) => (
+                  <div
+                    key={index}
+                    className={`pagination-dot ${
+                      index === currentPage ? "active" : ""
+                    }`}
+                    onClick={() => handleDotClick(index)}
+                  ></div>
+                ))}
+                {currentPage < totalPages - 1 && (
+                  <button className="pagination-btn-right" onClick={handleNextPage}><GrNext /></button>
+                )}
+              </div> */}
             </div>
           </div>
-          
         </div>
       )}
     </>

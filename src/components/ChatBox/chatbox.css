@@ -91,7 +91,7 @@
 .chat-content .user-message .details{
     margin-left: auto;
     /* max-width: calc(100% - 200px); */
-    max-width: 420px;
+    max-width: 680px;
 }
 
 .user-message .details p {
@@ -116,7 +116,7 @@
     background: #fff;
     /* margin-left: 10px; */
     /* max-width: calc(100% - 200px); */
-    max-width: 420px;
+    max-width: 680px;
     border-radius: 12px;
     box-shadow: 0px 0.3px 0.9px rgba(0, 0, 0, 0.2), 0px 1.6px 3.6px rgba(0, 0, 0, 0.3);
 }

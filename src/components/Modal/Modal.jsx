@@ -85,7 +85,7 @@ function Modal(props) {
                       index === currentPage ? "active" : ""
                     }`}
                     onClick={() => handleDotClick(index)}
-                  >{index}</div>
+                  >{index + 1}</div>
                 ))}
                 {currentPage < totalPages - 1 && (
                   <button className="pagination-btn" onClick={handleNextPage}><GrNext className="pagination-btn-icon"/></button>

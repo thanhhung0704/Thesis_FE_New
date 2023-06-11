@@ -29,7 +29,7 @@ function ChatBox() {
     const [conversation_id, setConversation_id] = useState(null);
     const lastMessageRef = useRef(null);
     const [isSmallScreen, setIsSmallScreen] = useState(false);
-    const buttonRef = useRef(null);
+    //const buttonRef = useRef(null);
     const [mediaRecorder, setMediaRecorder] = useState(null);
     let chunks = [];
 
@@ -53,20 +53,20 @@ function ChatBox() {
           };
     }, []);
 
-    useEffect(() => {
-        const handleKeyDown = (event) => {
-          if (event.keyCode === 32) { // Check if spacebar key was pressed
-            event.preventDefault(); // Prevent the default spacebar behavior (scrolling)
-            buttonRef.current.click(); // Trigger the button click event
-          }
-        };
+    // useEffect(() => {
+    //     const handleKeyDown = (event) => {
+    //       if (event.keyCode === 32) { // Check if spacebar key was pressed
+    //         event.preventDefault(); // Prevent the default spacebar behavior (scrolling)
+    //         buttonRef.current.click(); // Trigger the button click event
+    //       }
+    //     };
     
-        document.addEventListener('keydown', handleKeyDown);
+    //     document.addEventListener('keydown', handleKeyDown);
     
-        return () => {
-          document.removeEventListener('keydown', handleKeyDown);
-        };
-      }, []);
+    //     return () => {
+    //       document.removeEventListener('keydown', handleKeyDown);
+    //     };
+    //   }, []);
 
     
     function boldString(str, substr) {
@@ -191,7 +191,7 @@ function ChatBox() {
         axios.post(url, data).then((response) => {
         //   console.log(response.data);
         //   console.log(response.data.context);
-        const contextList = response.data.context.map((item) => boldString(item, response.data.policy_response));
+            const contextList = response.data.context.map((item) => boldString(item, response.data.policy_response));
 
           if(response.data.end_position === -1 ) {
             setChatLog((prevChatLog) => [...prevChatLog, { type: 'bot', message: response.data.response, context: contextList, isContext: false, messagePolicy: response.data.policy_response  }])
@@ -360,21 +360,21 @@ function ChatBox() {
                         <TbSend className='send-btn-icon' />
                     </button>
                     {isRecording ? (
-                        <button ref={buttonRef}
+                        <button 
                             className={`voice-btn-record ${isPress ? 'pulse' : ''} ${isInput ? 'btn-hide' : ''} ${isClick ? 'voice-btn-record-big' : ''}   `}
                             // onMouseLeave={handleStopRecording}
                             // onMouseUp={handleStopRecording}
-                            // onClick={isSmallScreen? handleStopRecording : null}
-                            onClick= {handleStopRecording}
+                            onClick={isSmallScreen? handleStopRecording : null}
+                            //onClick= {handleStopRecording}
                             onMouseUp={isSmallScreen? null : handleStopRecording}
                             onMouseLeave={isSmallScreen? null : handleStopRecording}
                         >
                             <FaTimes />
                         </button>
-                    ) : (<button ref={buttonRef}
+                    ) : (<button
                         className={`voice-btn-record ${isPress ? 'pulse' : ''} ${isInput ? 'btn-hide' : ''} ${isClick ? 'voice-btn-record-big' : ''}   `}
-                        // onClick={isSmallScreen? handleStartRecording : null}
-                        onClick= {handleStartRecording}
+                        onClick={isSmallScreen? handleStartRecording : null}
+                        //onClick= {handleStartRecording}
                         onMouseDown={isSmallScreen? null : handleStartRecording}
                         >
                             {
